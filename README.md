@@ -11,6 +11,8 @@ TThe project is a web-based application called AraboScripto designed to recogniz
 - **Frontend:** Java (with React.js), HTML, CSS
 - **Backend:** Flask (python)
 - **Machine Learning:** Keras, TensorFlow, Pandas, Numpy, Matplotlib
+- **DataSet:** Kaggle: [Download Dataset from Kaggle](https://www.kaggle.com/datasets/mloey1/ahcd1/download?datasetVersionNumber=2)
+
 
 ## Current Progress
 - Developed the CNN model with four convolutional layers, four max pooling layers, and three dense layers, achieving an accuracy of 82.5%.
