@@ -11,7 +11,7 @@ TThe project is a web-based application called AraboScripto designed to recogniz
 - **Frontend:** Java (with React.js), HTML, CSS
 - **Backend:** Flask (python)
 - **Machine Learning:** Keras, TensorFlow, Pandas, Numpy, Matplotlib
-- **DataSet:** Kaggle: [Download Dataset from Kaggle](https://www.kaggle.com/datasets/mloey1/ahcd1/download?datasetVersionNumber=2)
+- **DataSet:** [Kaggle Dataset](https://www.kaggle.com/datasets/mloey1/ahcd1/download?datasetVersionNumber=2)
 
 
 ## Current Progress
