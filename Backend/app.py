@@ -1,53 +1,50 @@
-from flask import Flask, request, jsonify
-from keras.models import load_model
-import numpy as np
-from PIL import Image
-import io
-from flask_cors import CORS, cross_origin
+from flask import Flask, request, jsonify  # Flask web framework
+from flask_cors import CORS  # Cross-Origin Resource Sharing
+from tensorflow.keras.models import load_model  # Load Keras model
+import numpy as np  # Numerical operations
+import cv2  # OpenCV for image processing
+
+# Initialize Flask app
 app = Flask(__name__)
-CORS(app, support_credentials=True)
-model = load_model('C:\\Users\\bouma\\Downloads\\Intermediate_code\\Models\\IS_THE_arabic_handwriting_model.h5')  # Load your trained model
+CORS(app)  # Enable CORS for the app
+
+# Load the trained model
+model_path = 'C:/Users/bouma/Downloads/Intermediate_code/Models/model4arabic.keras'
+model = load_model(model_path)
+
+# List of Arabic characters
+arabic_characters = ["أ Alif", "ب Bae", "ت Tae", "ث Thae", "ج Jim ", "ح Hae ", "خ Khae", " Dal د", "Zal ذ", "Rae ر", "Zay ز", " Sin س", "Shin ش", " Sad ص", "Dad ض", "ط Tae ", "ظ Dad ", "Ayn ع", "Ghayn غ", "Fae ف", "Kaf ق", " ك Kaf ", "ل Lam ", "م Mim", "نNoun ", "Hae ه", "و Waw ", "Yae ي"]
+
+# Route for image conversion
 @app.route('/convert', methods=['POST'])
-@cross_origin(origin='*')
-def convert():
-    image = Image.open(io.BytesIO(request.files['file'].read())).convert('L')
-    image = image.resize((32, 32))
-    image = np.array(image).reshape(1, 32, 32, 1) / 255.0
-    prediction = model.predict(image)
-    predicted_class = np.argmax(prediction, axis=1)[0]
-    arabic_character = map_class_to_character(predicted_class)
-    return jsonify({'character': arabic_character})
-def map_class_to_character(class_index):
-    class_to_character = {
-        1: "الف,Alif",
-        2: "باء, Bae",
-        3: "تاء, Tae",
-        4: "ثاء, Thae",
-        5: "جيم, Jim",
-        6: "حاء, Hae",
-        7: "خاء, Khae",
-        8: "دال, Dal",
-        9: "ذال, Zal",
-        10: "راء, Rae",
-        11: "زين, Zayn",
-        12: "سين, Sin",
-        13: "شين, Shin",
-        14: "صاد, Sad",
-        15: "ضاد, Dad",
-        16: "طاء, Tae",
-        17: "ظاء, Dae",
-        18: "عين, Ayn",
-        19: "غين, Ghayn",
-        20: "فاء, Fae",
-        21: "قاف, Kaf",
-        22: "كاف, Kaf",
-        23: "لام, Lam",
-        24: "ميم, Mim",
-        25: "نون, Noun",
-        26: "هاء, Hae",
-        27: "واو, Waw",
-        28: "ياء, Yae"
-    }
-    return class_to_character.get(class_index, " Unrecognized Character!")
+def convert_image():
+    file = request.files.get('file')  # Get the file from the request
+    if not file:
+        return jsonify({'error': 'No file provided'}), 400  # Return error if no file is provided
+
+    try:
+        # Read the image using OpenCV
+        image = cv2.imdecode(np.frombuffer(file.read(), np.uint8), cv2.IMREAD_GRAYSCALE)
+        if image is None:
+            return jsonify({'error': 'Failed to read the image'}), 500  # Return error if image reading fails
+
+        # Preprocess the image
+        resized_image = cv2.resize(image, (32, 32))
+        normalized_image = resized_image.astype('float32') / 255.0
+        input_image = np.expand_dims(normalized_image, axis=0)
+        input_image = np.expand_dims(input_image, axis=-1)
+
+        # Make a prediction
+        prediction = model.predict(input_image)
+        predicted_class = np.argmax(prediction, axis=-1)[0]
+        predicted_character = arabic_characters[predicted_class]
+
+        print(f"Predicted character: {predicted_character}")  # Log the predicted character
+        return jsonify({'message': predicted_character})  # Return the predicted character
+    except Exception as e:
+        app.logger.error('Error processing image: %s', str(e))
+        return jsonify({'error': str(e)}), 500  # Return error if image processing fails
+
+# Run the Flask app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True)  # Run the app in debug mode
