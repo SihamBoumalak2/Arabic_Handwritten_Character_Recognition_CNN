@@ -9,15 +9,25 @@ TThe project is a web-based application called AraboScripto designed to recogniz
 
 ## Technologies Used
 - **Frontend:** Java (with React.js), HTML, CSS
-- **Backend:** Flask (python)
-- **Machine Learning:** Keras, TensorFlow, Pandas, Numpy, Matplotlib
+- **Backend:** Flask (python with version Python 3.11.7)
+- **Machine Learning:** Jupyter (Python 3.11.7 | packaged by Anaconda) , Keras, TensorFlow, Pandas, Numpy, Matplotlib
 - **DataSet:** [Kaggle Dataset](https://www.kaggle.com/datasets/mloey1/ahcd1/download?datasetVersionNumber=2)
 
+## How to Run the Flask App
+###For the Backend:
+- Create a virtual environemnt (python -m venv venv)
+- Activate the environment
+- Run app.py
+###For the Frontend:
+- Install Node.js and npm
+- Run npm start
 
-## Current Progress
-- Developed the CNN model with four convolutional layers, four max pooling layers, and three dense layers, achieving an accuracy of 82.5%.
-- Developed the frontend and backend infrastructure to handle image uploads and character recognition requests.
 
+## Accomplishments
+- Developed a user friendly website where the user can click to learn about the website and click to upload a png image of a handwritten arabic character. When the user uploads a picture they are able to see the image they have uploaded. they can change the image or click convert to recognize the character in the image
+- Developed the CNN model with three convolutional layers, three max pooling layers, and one dense layer, achieving an accuracy of 94.7%.
+  
 ## Future Enhancements
 - Expand the dataset to include more diverse handwriting samples for improved accuracy.
 - Data Augmentation to avoid overfitting.
+- I will use transfer learning to leverage a pre-trained convolutional neural network's knowledge and adapt it to my Arabic handwritten character recognition task, potentially improving the model's performance and training efficiency.
